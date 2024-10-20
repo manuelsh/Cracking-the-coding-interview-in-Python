@@ -2,17 +2,21 @@
 import unittest
 
 def remove_duplicates(head):
-    nodes = {}
-    node = head
-    while(node!=None):
-        if node.data in nodes.keys():
-            node.data = node.next.data
-            node.next = node.next.next
-        else:
-            nodes[node.data] = 1
-            node = node.next
-
-    return head
+  prev_element = head
+  next_element = head.next
+  elements = [head.data]
+  while next_element is not None:
+    if next_element.data in elements:
+      if next_element.next is None:
+        prev_element.next = None
+        next_element = None
+      else:
+        prev_element.next = next_element.next
+        next_element = prev_element.next
+    else:
+      elements.append(next_element.data)
+      prev_element = next_element
+      next_element = next_element.next
 
 
 
@@ -27,6 +31,8 @@ class Node():
 class Test(unittest.TestCase):
   def test_remove_duplicates(self):
     head = Node(1,Node(3,Node(3,Node(1,Node(5,None)))))
+    remove_duplicates(head)
+    head = Node(1,Node(3,Node(3,None)))
     remove_duplicates(head)
     self.assertEqual(head.data, 1)
     self.assertEqual(head.next.data, 3)
